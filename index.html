@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffd9e6">
+<title>Para a Mariana 💌</title>
+<style>
+:root{--fg:#5a2f40;--muted:#b07a90;--accent:#d6457b;--pink1:#ffe9f1;--pink2:#ffd0e1;--pink3:#ffc0d8;--paper:#fffafc;--petal:#ff8fb5;--env:#f7a8c4;--env2:#f18db2}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--pink1);color:var(--fg);font-family:Georgia,'Times New Roman',serif;overflow:hidden;-webkit-user-select:none;user-select:none;cursor:pointer}
+.bg{position:fixed;inset:0;background:linear-gradient(130deg,var(--pink1),var(--pink2),var(--pink3),var(--pink1));background-size:300% 300%;animation:drift 16s ease-in-out infinite}
+@keyframes drift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.petal{position:fixed;top:-30px;background:var(--petal);border-radius:150% 0 150% 0;opacity:0;animation:fall linear infinite;will-change:transform}
+@keyframes fall{0%{transform:translate3d(0,-5vh,0) rotate(0);opacity:0}10%{opacity:.7}50%{transform:translate3d(30px,55vh,0) rotate(180deg)}100%{transform:translate3d(-20px,110vh,0) rotate(360deg);opacity:.15}}
+.scene{position:fixed;inset:0;height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.75rem;text-align:center;transition:opacity 1s ease}
+/* envelope */
+#intro{z-index:5}
+#intro.gone{opacity:0;pointer-events:none}
+.to{font-size:1.15rem;color:var(--muted);font-style:italic;margin-bottom:2.2rem}
+.env{position:relative;width:min(78vw,330px);aspect-ratio:3/2;perspective:900px;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 14px 22px rgba(214,69,123,.28))}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.env.open{animation:none}
+.env>*{position:absolute}
+.back{inset:0;background:var(--env2);border-radius:6px;z-index:0}
+.letter{left:7%;right:7%;top:6%;height:88%;background:var(--paper);border-radius:4px;z-index:2;transition:transform 1s ease .7s;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.6rem;font-style:italic}
+.env.open .letter{transform:translateY(-62%) scale(1.04)}
+.front{inset:0;background:var(--env);clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%);border-radius:6px;z-index:3}
+.flap{left:0;right:0;top:0;height:58%;background:linear-gradient(#f394b8,var(--env2));clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;z-index:4;transition:transform .8s ease}
+.env.open .flap{transform:rotateX(180deg);z-index:1;transition:transform .8s ease,z-index 0s .35s}
+.seal{left:50%;top:58%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;z-index:5;box-shadow:0 3px 8px rgba(0,0,0,.2);transition:opacity .3s}
+.env.open .seal{opacity:0}
+.hint{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 2.2rem);left:0;right:0;text-align:center;color:var(--muted);font-size:.95rem;font-style:italic;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:.95}}
+/* leitura */
+#stage{z-index:3;opacity:0;pointer-events:none}
+#stage.on{opacity:1}
+#t{max-width:30rem;font-size:clamp(1.35rem,5.4vw,1.9rem);line-height:1.6;min-height:10rem;display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
+#t.big{font-size:clamp(2rem,9vw,3rem);color:var(--accent)}
+#t.sig{color:var(--accent);font-style:italic}
+#t span{display:inline-block;opacity:0;transform:translateY(12px);filter:blur(4px);animation:w .8s ease forwards;margin-right:.28em}
+@keyframes w{to{opacity:1;transform:none;filter:none}}
+#t.out{animation:o .45s ease forwards}
+@keyframes o{to{opacity:0;transform:translateY(-8px)}}
+.dots{position:absolute;top:calc(env(safe-area-inset-top,0px) + 1.5rem);display:flex;gap:7px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--muted);opacity:.35;transition:all .5s}
+.dots i.on{background:var(--accent);opacity:1;transform:scale(1.4)}
+#mute{position:fixed;z-index:9;top:calc(env(safe-area-inset-top,0px) + .9rem);right:1rem;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.65);font-size:1.05rem;cursor:pointer;display:none}
+@media (prefers-reduced-motion:reduce){.bg,.petal,.hint,.env{animation:none}#t span{animation-duration:.01s}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div id="petals"></div>
+<div id="ytbox" style="position:fixed;bottom:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden"><div id="ytp"></div></div>
+<audio id="m" src="musica.mp3" loop preload="auto" playsinline></audio>
+<button id="mute" aria-label="Som">🔊</button>
+
+<div class="scene" id="intro">
+  <div class="to">Para a Mariana</div>
+  <div class="env" id="env">
+    <div class="back"></div>
+    <div class="letter">💌</div>
+    <div class="front"></div>
+    <div class="flap"></div>
+    <div class="seal">♥</div>
+  </div>
+  <div class="hint">toque para abrir</div>
+</div>
+
+<div class="scene" id="stage">
+  <div class="dots" id="dots"></div>
+  <div id="t"></div>
+  <div class="hint" id="hint">toque para continuar</div>
+</div>
+
+<script>
+var S=[
+ {x:"Mariana, me desculpa.",c:"big"},
+ {x:"Você deixou claro que não está pronta pra ter algo com ninguém. Em vez de respeitar o seu tempo, eu apressei as coisas e falei coisas que não deveria."},
+ {x:"Isso foi errado, e eu sinto muito por ter te chateado. Você não deve nada a ninguém: nem resposta, nem explicação, nem uma conversa agora."},
+ {x:"Esse um ano de amizade importa muito pra mim, e eu não quero estragar isso. Também não quero que você se sinta pressionada por causa desta mensagem."},
+ {x:"O que eu sinto por você é sincero, e é justamente por isso que quero fazer o certo: te dar espaço, no seu ritmo."},
+ {x:"Você é uma pessoa maravilhosa, e nesse um ano eu aprendi muito com você. Fiz esta página pra tentar mostrar, pelo menos um pouquinho, o quanto você é importante pra mim."},
+ {x:"Eu pretendo melhorar como pessoa, pra você ter sempre o meu melhor lado, e pra gente voltar a rir à beça e ficar fazendo fofoca."},
+ {x:"Com todo o respeito e carinho.",c:"sig"}
+];
+/* MUSICA: cole aqui o ID do video do YouTube (a parte depois de v= no link). Deixe vazio para usar o musica.mp3 */
+var YOUTUBE_ID="BksBNbTIoPE";
+var YT_START=0;
+var state=0,i=0,busy=false,muted=false,yp=null,ypReady=false;
+if(YOUTUBE_ID){
+ var tg=document.createElement('script');tg.src="https://www.youtube.com/iframe_api";document.head.appendChild(tg);
+ window.onYouTubeIframeAPIReady=function(){
+  yp=new YT.Player('ytp',{width:'1',height:'1',videoId:YOUTUBE_ID,
+   playerVars:{playsinline:1,controls:0,loop:1,playlist:YOUTUBE_ID,start:YT_START,rel:0},
+   events:{onReady:function(){ypReady=true}}});
+ };
+}
+var t=document.getElementById('t'),hint=document.getElementById('hint'),dots=document.getElementById('dots'),
+    au=document.getElementById('m'),mute=document.getElementById('mute'),env=document.getElementById('env');
+S.forEach(function(){dots.appendChild(document.createElement('i'))});
+var pe=document.getElementById('petals');
+for(var k=0;k<16;k++){var p=document.createElement('div');p.className='petal';var s=9+Math.random()*12;
+ p.style.cssText='left:'+Math.random()*100+'%;width:'+s+'px;height:'+s+'px;animation-duration:'+(11+Math.random()*10)+'s;animation-delay:-'+Math.random()*18+'s';pe.appendChild(p)}
+function show(n){
+ var d=S[n];t.className=d.c||'';t.innerHTML='';
+ d.x.split(' ').forEach(function(w,j){var e=document.createElement('span');e.textContent=w;e.style.animationDelay=(j*0.09)+'s';t.appendChild(e)});
+ Array.prototype.forEach.call(dots.children,function(el,j){el.className=j===n?'on':''});
+ hint.style.display=n===S.length-1?'none':'block';
+ busy=true;setTimeout(function(){busy=false},Math.min(1600,d.x.split(' ').length*90+500));
+}
+function next(){
+ if(busy||i>=S.length-1)return;
+ t.classList.add('out');busy=true;
+ setTimeout(function(){i++;show(i)},450);
+}
+function openLetter(){
+ state=1;env.classList.add('open');
+ if(YOUTUBE_ID){
+  try{if(ypReady){yp.setVolume(60);yp.playVideo();mute.style.display='block'}
+  else{var tries=0,iv=setInterval(function(){tries++;if(ypReady){clearInterval(iv);yp.setVolume(60);yp.playVideo();mute.style.display='block'}else if(tries>40)clearInterval(iv)},250)}}catch(e){}
+ }else{
+  try{au.volume=.6;var pr=au.play();if(pr&&pr.then)pr.then(function(){mute.style.display='block'}).catch(function(){})}catch(e){}
+ }
+ setTimeout(function(){
+  document.getElementById('intro').classList.add('gone');
+  document.getElementById('stage').classList.add('on');
+  show(0);state=2;
+ },2800);
+}
+document.body.addEventListener('click',function(){
+ if(state===0)openLetter();else if(state===2)next();
+});
+mute.addEventListener('click',function(e){
+ e.stopPropagation();muted=!muted;
+ if(yp&&ypReady){muted?yp.mute():yp.unMute()}else{au.muted=muted}
+ mute.textContent=muted?'🔇':'🔊';
+});
+</script>
+</body>
+</html>
